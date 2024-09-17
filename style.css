@@ -1,0 +1,49 @@
+/* General body and layout */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+h1 {    
+    margin-top: 20px;
+}
+
+.hint-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+img.hint-image, img.hint-image-2 {
+    width: 200px;
+    height: auto;
+    margin: 5px 0;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    background-color: lightgray;
+}
+
+/* Hide Explanation and Second Hint Image Initially */
+.hint-image-2, .explanation {
+    display: none;
+}
+
+#next {
+    display: block;
+    margin: 20px auto 0 auto; /* Center horizontally and add margin above */
+    padding: 15px 30px;
+    cursor: pointer;
+    background-color: lightgray;
+    font-size: 16px;
+}
+
+/* Try again button styling */
+#summarypage button {
+    padding: 15px 30px;
+    font-size: 18px;
+}
