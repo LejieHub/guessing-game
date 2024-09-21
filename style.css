@@ -2,9 +2,12 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-h1 {    
+h1 {
     margin-top: 20px;
 }
 
@@ -15,10 +18,26 @@ h1 {
     margin-bottom: 5px;
 }
 
+/* Hint images with consistent size */
 img.hint-image, img.hint-image-2 {
-    width: 200px;
-    height: auto;
+    width: 150px;
+    height: 150px; /* Ensuring consistent height */
+    object-fit: cover; /* Ensures the image maintains aspect ratio */
     margin: 5px 0;
+}
+
+/* Evolution step images */
+.image-container {
+    display: flex;
+    overflow: hidden; /* Prevent overflow */
+    justify-content: center; /* Center images horizontally */
+    margin-top: 10px;
+    max-width: 100%; /* Ensure images don't overflow container */
+}
+
+.evolution-step {
+    width: 100px; /* Adjust size as needed */
+    margin: 5px;
 }
 
 button {
@@ -26,6 +45,9 @@ button {
     margin: 10px;
     cursor: pointer;
     background-color: lightgray;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
 /* Hide Explanation and Second Hint Image Initially */
@@ -33,9 +55,10 @@ button {
     display: none;
 }
 
+/* Next button */
 #next {
     display: block;
-    margin: 20px auto 0 auto; /* Center horizontally and add margin above */
+    margin: 20px auto 0 auto;
     padding: 15px 30px;
     cursor: pointer;
     background-color: lightgray;
@@ -46,4 +69,45 @@ button {
 #summarypage button {
     padding: 15px 30px;
     font-size: 18px;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 24px;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    img.hint-image, img.hint-image-2 {
+        width: 150px;
+        height: 150px;
+    }
+
+    .evolution-step {
+        width: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 20px;
+    }
+
+    button {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    img.hint-image, img.hint-image-2 {
+        width: 120px;
+        height: 120px;
+    }
+
+    .evolution-step {
+        width: 60px;
+    }
 }

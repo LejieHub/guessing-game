@@ -1,63 +1,60 @@
 let score = 0;
 let questionIndex = 0;
-let attempts = 0;  // Use a single attempts variable to track the number of attempts
+let attempts = 0; 
 
 let scoreElement = document.querySelector('.score');
-let nextButton = document.getElementById('next'); // Reference to the Next button
+let nextButton = document.getElementById('next');
 let questions = document.querySelectorAll(".question");
 
 // Initialize quiz
 loadQuestion();
 
-// Function to handle user's answer
+function showEvolutionImages(steps) {
+    steps.forEach((step, index) => {
+        setTimeout(() => {
+            step.style.display = 'block'; // Show the image
+        }, index * 1000); // Delay for each image
+    });
+}
+
 function check(event) {
-    attempts++;  // Increase the number of attempts for the current question
+    attempts++;  
     let button = event.target;
 
-    // Get the current question element
-    let explanationElement = questions[questionIndex].querySelector('.explanation'); // Select explanation within the current question
-    let hintImage2 = questions[questionIndex].querySelector('.hint-image-2'); // Select second hint within the current question
+    let explanationElement = questions[questionIndex].querySelector('.explanation');
+    let hintImage2 = questions[questionIndex].querySelector('.hint-image-2');
+    let evolutionContainer = questions[questionIndex].querySelector('.image-container');
+    let evolutionSteps = evolutionContainer.querySelectorAll('.evolution-step');
 
-    // Check button class using exact string matching
+    if (attempts === 1) {
+        evolutionContainer.style.display = 'flex'; // Show evolution images on first attempt
+        showEvolutionImages(evolutionSteps);
+    }
+
     if (button.className === "correct") {
         button.style.background = "green";
-        hintImage2.style.display = "block";  // Show second hint
-        explanationElement.style.display = "block"; // Show explanation
-
         if (attempts === 1 || attempts === 2) {
             score++;
             scoreElement.textContent = score;
         }
-
-        disableButtons();  // Disable further clicks
-        nextButton.disabled = false;  // Enable Next button
+        hintImage2.style.display = "block";  
+        explanationElement.style.display = "block"; // Always show explanation if correct
+        disableButtons(); 
+        nextButton.style.display = 'block'; // Show the Next button
+        nextButton.disabled = false; 
     } else if (button.className === "incorrect") {
         button.style.background = "red";
-        if (attempts === 1) {
-            hintImage2.style.display = "block";  // Show second hint after first wrong attempt
-        } else if (attempts >= 2) { // Max attempts reached
-            explanationElement.style.display = "block";  // Show explanation
-            showAllButtonColors();  // Show all button colors (correct/incorrect)
-            disableButtons();  // Disable further clicks
-            nextButton.disabled = false;  // Enable Next button
+        if (attempts === 2) {
+            hintImage2.style.display = "block";  
+            explanationElement.style.display = "block"; // Show explanation on second attempt if incorrect
+            disableButtons(); 
+            nextButton.style.display = 'block'; // Show the Next button
+            nextButton.disabled = false; 
         }
     }
 }
 
-// Function to show all button colors
-function showAllButtonColors() {
-    const buttons = questions[questionIndex].querySelectorAll("button");
-    for (let button of buttons) {
-        // Check button class using exact string matching
-        if (button.className === "correct") {
-            button.style.background = "green";  // Correct answers are green
-        } else if (button.className === "incorrect") {
-            button.style.background = "red";  // Incorrect answers are red
-        }
-    }
-}
 
-// Disable all buttons after answer
 function disableButtons() {
     const buttons = questions[questionIndex].querySelectorAll("button");
     for (let button of buttons) {
@@ -65,67 +62,70 @@ function disableButtons() {
     }
 }
 
-// Restart quiz
 function restartQuiz() {
     score = 0;
     scoreElement.textContent = score;
-    attempts = 0;  // Reset attempts on restart
+    attempts = 0;  
 
-    // Hide summary page and show the first question
     document.getElementById('summarypage').style.display = 'none';
-
-    // Reset question states and show the first question
     questionIndex = 0;
     loadQuestion();
+
+    // Reset hint image and explanation display
+    const currentQuestion = questions[questionIndex];
+    const hintImage2 = currentQuestion.querySelector('.hint-image-2');
+    const explanationElement = currentQuestion.querySelector('.explanation');
+    hintImage2.style.display = 'none';  // Hide hint image 2
+    explanationElement.style.display = 'none';  // Hide explanation
 }
 
-// Show the summary after quiz completion
 function showSummary() {
     for (let question of questions) {
         question.style.display = 'none';
     }
     document.getElementById('summarypage').style.display = "block";
-    nextButton.style.display = "none";  // Hide the Next button on the summary page
+    nextButton.style.display = "none"; 
 }
 
-// Navigate to the next question
 function nextQuestion() {
     if (questionIndex < questions.length - 1) {
         questionIndex++;
-        attempts = 0;  // Reset attempts for the new question
+        attempts = 0; 
         loadQuestion();
     } else {
-        showSummary(); // If it's the last question, show summary
+        showSummary(); 
     }
 }
 
-// Load the question based on the current index
 function loadQuestion() {
-    nextButton.style.display = "block";
+    nextButton.style.display = "none"; // Hide the Next button initially
 
-    // Hide all questions first
     for (let question of questions) {
         question.style.display = 'none';
+        let evolutionContainer = question.querySelector('.image-container');
+        evolutionContainer.style.display = 'none'; 
+        const evolutionSteps = evolutionContainer.querySelectorAll('.evolution-step');
+        evolutionSteps.forEach(step => {
+            step.style.display = 'none'; 
+        });
     }
 
-    // Show the current question
     questions[questionIndex].style.display = 'block';
     const buttons = questions[questionIndex].querySelectorAll("button");
 
     for (let button of buttons) {
-        button.disabled = false; // Enable all buttons for the current question
-        button.style.background = "lightgray";  // Reset button color
+        button.disabled = false; 
+        button.style.background = "lightgray";  
 
-        // Add event listener to each button
-        button.onclick = check;  // Call check function when the button is clicked
+        button.onclick = check;  
     }
 
-    // Display hint and explanation if question is answered
-    const currentHintImage2 = questions[questionIndex].querySelector('.hint-image-2');
-    const currentExplanation = questions[questionIndex].querySelector('.explanation');
-    currentHintImage2.style.display = "none";
-    currentExplanation.style.display = "none";
+    // Reset hint image and explanation display for the current question
+    const currentQuestion = questions[questionIndex];
+    const hintImage2 = currentQuestion.querySelector('.hint-image-2');
+    const explanationElement = currentQuestion.querySelector('.explanation');
+    hintImage2.style.display = 'none';  
+    explanationElement.style.display = 'none';
 
-    // Disable Next button until the question is answered or attempts are used up
-    nextButton.disabled = true;
+    nextButton.disabled = true; // Disable Next button initially
 }
