@@ -31,6 +31,8 @@ function check(event) {
         showEvolutionImages(evolutionSteps);
     }
 
+    button.disabled = true;
+
     if (button.className === "correct") {
         button.style.background = "green";
         if (attempts === 1 || attempts === 2) {
@@ -53,6 +55,7 @@ function check(event) {
         }
     }
 }
+
 
 
 function disableButtons() {
